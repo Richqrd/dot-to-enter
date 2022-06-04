@@ -70,6 +70,6 @@ app.post('/sendmessage', async (req, res) => {
 	res.send("post succesful");
 });
 
-app.listen(port, () => { 
+app.listen(process.env.PORT || port, () => { 
 	console.log('Hello world on port 3000!')
 });
