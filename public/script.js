@@ -53,6 +53,7 @@ document.addEventListener("keydown", function(event) {
 		blink = setInterval(blinking, 10);
 		nokeys = false;
 		mainBody.style.opacity = 0.7;
+		str = [];
 	}
 
 	if(event.keyCode == 8) {
@@ -79,7 +80,10 @@ document.addEventListener("keydown", function(event) {
 				break;
 		}
 	} else if (event.keyCode == 190) { // period, end
-		httpPostAsync("/sendmessage", "message=" + parseText(str), console.log);
+		httpPostAsync("/sendmessage", "message=" + parseText(str), function(l) {});
+
+		new_message = parseText(str);
+		nokeys = true;
 
 		//stop blinking visual
 		clearInterval(blink);
@@ -104,11 +108,12 @@ function parseText(arr) {
 
 	//i -> I
 	var pronoun = output.search(" i ");
-	if (pronoun >= 0) {
+	while (pronoun >= 0) {
 		var s1 = output.substr(0, pronoun+1);
 		var s2 = output.substr(pronoun+2, output.length);
 		var ch = output[pronoun+1].toUpperCase();
 		output = s1 + ch + s2;
+		pronoun = output.search(" i ");
 	}
 
 	//name processing
@@ -126,6 +131,7 @@ function parseText(arr) {
 
 var checkupdates;
 var prev_message = "";
+var new_message = "";
 window.onload = function() {
 	httpGetAsync("/formdata", function (data) {
 		prev_message = data;
@@ -140,18 +146,22 @@ window.onload = function() {
 	checkupdates = setInterval(function () {
 		httpGetAsync("/formdata", function (data) {
 			if(prev_message != data.toString()) {
-				prev_message = data;
-				inpt.innerHTML = prev_message;
+				if(new_message != data.toString()) {
+					prev_message = data;
+					inpt.innerHTML = prev_message;
 
-				//load in visual dot only after data has loaded in; blank page before everything has loaded
-				clearInterval(blink);
-				dot.style.opacity = 1;
-				mainBody.style.opacity = 1;
-				nokeys = true;
-				console.log("DIFFERENT");
-				str = [];
+					//load in visual dot only after data has loaded in; blank page before everything has loaded
+					clearInterval(blink);
+					dot.style.opacity = 1;
+					mainBody.style.opacity = 1;
+					nokeys = true;
+					//console.log("DIFFERENT");
+					str = [];
+				} else {
+					prev_message = new_message;
+				}
 			}
-			console.log("check");
+			//console.log("check");
 		});
 	}, 5000);
 }
