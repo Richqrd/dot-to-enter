@@ -52,7 +52,7 @@ document.addEventListener("keydown", function(event) {
 	if (nokeys == true) {
 		blink = setInterval(blinking, 10);
 		nokeys = false;
-		mainBody.style.opacity = 0.7;
+		mainBody.style.opacity = 0.5;
 		str = [];
 	}
 
@@ -62,7 +62,7 @@ document.addEventListener("keydown", function(event) {
 		}
 	} else if (event.keyCode == 16) {
 		//pass
-	} else if (event.keyCode >= 65 && event.keyCode <= 90 || event.keyCode==32) {
+	} else if (event.keyCode >= 65 && event.keyCode <= 90 || event.keyCode==32 || event.keyCode >= 48 && event.keyCode <= 57) { //alphanumeric and space
 		str.push(event.keyCode)
 	} else if (event.keyCode >= 186 && event.keyCode <= 189) {
 		switch(event.keyCode) {
@@ -91,7 +91,10 @@ document.addEventListener("keydown", function(event) {
 
 		//opacity visual
 		mainBody.style.opacity = 1;
+	} else if (event.keyCode == 222) { //apostrophe
+		str.push(4278124583);
 	}
+
 	inpt.innerHTML = parseText(str);
 });
 
@@ -124,6 +127,20 @@ function parseText(arr) {
 		var ch = output[x].toUpperCase();
 		output = s1 + ch + s2;
 		x = output.search("xincong");
+	}
+
+	//less than three
+	var lt = output.search("less than three");
+	while(lt >=0) {
+		output = output.replace("less than three", "<3");
+		lt = output.search("less than three");
+	}
+
+	//heart
+	var h = output.search("heart");
+	while(h >= 0) {
+		output = output.replace("heart", "❤️");
+		h = output.search("heart");
 	}
 
 	return output;
