@@ -119,6 +119,16 @@ function parseText(arr) {
 		pronoun = output.search(" i ");
 	}
 
+	//i' -> I
+	var pronoun = output.search(" i'");
+	while (pronoun >= 0) {
+		var s1 = output.substr(0, pronoun+1);
+		var s2 = output.substr(pronoun+2, output.length);
+		var ch = output[pronoun+1].toUpperCase();
+		output = s1 + ch + s2;
+		pronoun = output.search(" i'");
+	}
+
 	//name processing
 	var x = output.search("xincong");
 	while (x >= 0) {
