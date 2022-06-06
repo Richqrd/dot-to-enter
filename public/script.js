@@ -98,9 +98,12 @@ document.addEventListener("keydown", function(event) {
 	inpt.innerHTML = parseText(str);
 });
 
-// parse keyboard inputs
+
+//main parse function
 function parseText(arr) {
 	output = "";
+
+	//lowercase everything initially except first character
 	for (var i = 0; i < str.length; i++) {
 		if (i >= 1) {
 			output = output + ( String.fromCharCode(str[i]) ).toString().toLowerCase();
@@ -109,53 +112,35 @@ function parseText(arr) {
 		}
 	}
 
-	//i -> I
-	var pronoun = output.search(" i ");
-	while (pronoun >= 0) {
-		var s1 = output.substr(0, pronoun+1);
-		var s2 = output.substr(pronoun+2, output.length);
-		var ch = output[pronoun+1].toUpperCase();
-		output = s1 + ch + s2;
-		pronoun = output.search(" i ");
-	}
-
-	//i' -> I
-	var pronoun = output.search(" i'");
-	while (pronoun >= 0) {
-		var s1 = output.substr(0, pronoun+1);
-		var s2 = output.substr(pronoun+2, output.length);
-		var ch = output[pronoun+1].toUpperCase();
-		output = s1 + ch + s2;
-		pronoun = output.search(" i'");
-	}
-
-	//name processing
-	var x = output.search("xincong");
-	while (x >= 0) {
-		var s1 = output.substr(0, x);
-		var s2 = output.substr(x+1, output.length);
-		var ch = output[x].toUpperCase();
-		output = s1 + ch + s2;
-		x = output.search("xincong");
-	}
-
-	//less than three
-	var lt = output.search("less than three");
-	while(lt >=0) {
-		output = output.replace("less than three", "<3");
-		lt = output.search("less than three");
-	}
-
-	//heart
-	var h = output.search("heart");
-	while(h >= 0) {
-		output = output.replace("heart", "❤️");
-		h = output.search("heart");
+	//text replacement
+	for (var i = 0; i < replacement_dictionary.length; i++) {
+		output = textReplace(output, replacement_dictionary[i][0], replacement_dictionary[i][1]);
 	}
 
 	return output;
 }
 
+//dictionary of replacements - can be used for replacements or CAPITALIZATION
+var replacement_dictionary = [ // each subarray has 2 elements: what is being replaced, then replaced with what
+	[" i ", " I "],
+	[" i'", " I'"],
+	["xincong", "Xincong"],
+	["less than three", "<3"],
+	["heart", "❤️"],
+	["Xincong is cool", "😹"]
+];
+
+//text replace function
+function textReplace(inp, tis, tat) { // replace tis with tat
+	var out = inp;
+	while(out.search(tis) >= 0) {
+		out = out.replace(tis, tat);
+	}
+	return out;
+}
+
+
+//onload
 var checkupdates;
 var prev_message = "";
 var new_message = "";
