@@ -127,7 +127,8 @@ var replacement_dictionary = [ // each subarray has 2 elements: what is being re
 	["xincong", "Xincong"],
 	["less than three", "<3"],
 	["heart", "❤️"],
-	["Xincong is cool", "😹"]
+	["Xincong is cool", "😹"],
+	["michael", "PULLS"]
 ];
 
 //text replace function
